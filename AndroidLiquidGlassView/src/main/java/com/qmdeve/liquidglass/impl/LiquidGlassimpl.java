@@ -15,7 +15,7 @@
  *
  * @author QmDeve
  * @github https://github.com/QmDeve
- * @since 2025-11-02
+ * @since 2025-11-01
  */
 
 package com.qmdeve.liquidglass.impl;
@@ -49,8 +49,7 @@ public final class LiquidGlassimpl implements Impl {
     private RenderEffect cachedBlurEffect;
     private final int[] tp = new int[2];
     private final int[] hp = new int[2];
-    private final RuntimeShader refractionShader, materialShader, dispersionShader, tintShader;
-
+    private final RuntimeShader liquidShader;
     private float lastCornerRadius, lastEccentricFactor, lastRefractionHeight, lastRefractionAmount,
             lastContrast, lastWhitePoint, lastChromaMultiplier, lastSigma,
             lastChromaticAberration, lastDepthEffect, lastBlurLevel,
@@ -58,7 +57,6 @@ public final class LiquidGlassimpl implements Impl {
 
     private boolean needsUpdate = true;
     private long lastBlurUpdateTime = 0;
-
     private final Config config;
 
     public LiquidGlassimpl(View host, View target, Config config) {
@@ -66,10 +64,7 @@ public final class LiquidGlassimpl implements Impl {
         this.target = target;
         this.config = config;
         this.node = new RenderNode("AndroidLiquidGlassView");
-        this.refractionShader = loadAgsl(target.getResources(), R.raw.liquidglass_refraction_effect);
-        this.materialShader = loadAgsl(target.getResources(), R.raw.liquidglass_material_effect);
-        this.dispersionShader = loadAgsl(target.getResources(), R.raw.liquidglass_dispersion_effect);
-        this.tintShader = loadAgsl(target.getResources(), R.raw.liquidglass_tint_effect);
+        this.liquidShader = loadAgsl(target.getResources(), R.raw.liquidglass_effect);
 
         lastCornerRadius = Float.NaN;
         lastEccentricFactor = Float.NaN;
@@ -177,7 +172,6 @@ public final class LiquidGlassimpl implements Impl {
         if (width == 0 || height == 0) return;
 
         float cornerRadiusPx = config.CORNER_RADIUS_PX;
-        float eccentricFactor = config.ECCENTRIC_FACTOR;
         float refractionHeight = config.REFRACTION_HEIGHT;
         float refractionAmount = config.REFRACTION_OFFSET;
         float contrast = config.CONTRAST;
@@ -213,36 +207,25 @@ public final class LiquidGlassimpl implements Impl {
             }
         }
 
-        refractionShader.setFloatUniform("size", size);
-        refractionShader.setFloatUniform("cornerRadius", cornerRadiusPx);
-        refractionShader.setFloatUniform("eccentricFactor", eccentricFactor);
-        refractionShader.setFloatUniform("refractionHeight", refractionHeight);
-        refractionShader.setFloatUniform("refractionAmount", refractionAmount);
+        liquidShader.setFloatUniform("size", size);
+        liquidShader.setFloatUniform("offset", offset);
+        liquidShader.setFloatUniform("cornerRadii", cornerRadii);
+        liquidShader.setFloatUniform("refractionHeight", refractionHeight);
+        liquidShader.setFloatUniform("refractionAmount", refractionAmount);
+        liquidShader.setFloatUniform("depthEffect", depthEffect);
+        liquidShader.setFloatUniform("chromaticAberration", chromaticAberration);
+        liquidShader.setFloatUniform("contrast", contrast);
+        liquidShader.setFloatUniform("whitePoint", whitePoint);
+        liquidShader.setFloatUniform("chromaMultiplier", chromaMultiplier);
+        liquidShader.setFloatUniform("tintColor", new float[]{tintRed, tintGreen, tintBlue});
+        liquidShader.setFloatUniform("tintAlpha", tintAlpha);
 
-        RenderEffect refraction = RenderEffect.createRuntimeShaderEffect(refractionShader, "image");
-        RenderEffect refractionChain = (contentEffect != null)
-                ? RenderEffect.createChainEffect(refraction, contentEffect)
-                : refraction;
-        materialShader.setFloatUniform("contrast", contrast);
-        materialShader.setFloatUniform("whitePoint", whitePoint);
-        materialShader.setFloatUniform("chromaMultiplier", chromaMultiplier);
-        RenderEffect material = RenderEffect.createRuntimeShaderEffect(materialShader, "image");
-        RenderEffect materialChain = RenderEffect.createChainEffect(material, refractionChain);
-        dispersionShader.setFloatUniform("size", size);
-        dispersionShader.setFloatUniform("offset", offset);
-        dispersionShader.setFloatUniform("cornerRadii", cornerRadii);
-        dispersionShader.setFloatUniform("refractionHeight", refractionHeight);
-        dispersionShader.setFloatUniform("refractionAmount", refractionAmount);
-        dispersionShader.setFloatUniform("depthEffect", depthEffect);
-        dispersionShader.setFloatUniform("chromaticAberration", chromaticAberration);
-        RenderEffect chromaEffect = RenderEffect.createRuntimeShaderEffect(dispersionShader, "content");
-        tintShader.setFloatUniform("tintColor", new float[]{tintRed, tintGreen, tintBlue});
-        tintShader.setFloatUniform("tintAlpha", tintAlpha);
-        RenderEffect tintEffect = RenderEffect.createRuntimeShaderEffect(tintShader, "content");
-        RenderEffect chainAfterChroma = RenderEffect.createChainEffect(tintEffect, chromaEffect);
-        RenderEffect finalChain = RenderEffect.createChainEffect(chainAfterChroma, materialChain);
+        RenderEffect shaderEffect = RenderEffect.createRuntimeShaderEffect(liquidShader, "content");
+        RenderEffect finalEffect = (contentEffect != null)
+                ? RenderEffect.createChainEffect(shaderEffect, contentEffect)
+                : shaderEffect;
 
-        node.setRenderEffect(finalChain);
+        node.setRenderEffect(finalEffect);
     }
 
     private RuntimeShader loadAgsl(Resources resources, int resourceId) {
