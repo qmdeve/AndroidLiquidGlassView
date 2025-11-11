@@ -47,11 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayout controls;
     private LiquidGlassView liquidGlassView;
-    private Slider setCorners, setRefractionHeight, setRefractionOffset, setBlurRadius, setDispersion, setTintAlpha;
+    private Slider setCorners, setRefractionHeight, setRefractionOffset, setBlurRadius, setDispersion;
     private Button button;
     private ImageView images;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
-    private ColorPickerView colorPickerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,14 +100,11 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.button);
         images = findViewById(R.id.images);
 
-        colorPickerView = findViewById(R.id.clorPicker);
-
         setCorners = findViewById(R.id.setCorner);
         setRefractionHeight = findViewById(R.id.setRefractionHeight);
         setRefractionOffset = findViewById(R.id.setRefractionOffset);
         setBlurRadius = findViewById(R.id.setBlurRadius);
         setDispersion = findViewById(R.id.setDispersion);
-        setTintAlpha = findViewById(R.id.setTintAlpha);
 
         setCorners.setValueFrom(0);
         setCorners.setValueTo(99);
@@ -129,10 +125,6 @@ public class MainActivity extends AppCompatActivity {
         setDispersion.setValueFrom(0f);
         setDispersion.setValueTo(1f);
         setDispersion.setValue(0.5f);
-
-        setTintAlpha.setValueFrom(0f);
-        setTintAlpha.setValueTo(1f);
-        setTintAlpha.setValue(0f);
     }
 
     private void setView() {
@@ -182,18 +174,6 @@ public class MainActivity extends AppCompatActivity {
             if (b) {
                 liquidGlassView.setDispersion(v);
             }
-        });
-
-        setTintAlpha.addOnChangeListener((slider, v, b) -> {
-            if (b) {
-                liquidGlassView.setTintAlpha(v);
-            }
-        });
-
-        colorPickerView.setOnColorChangeListener((r, g, b) -> {
-            liquidGlassView.setTintColorRed(r);
-            liquidGlassView.setTintColorGreen(g);
-            liquidGlassView.setTintColorBlue(b);
         });
     }
 }
