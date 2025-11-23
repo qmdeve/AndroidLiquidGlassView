@@ -22,6 +22,13 @@ package com.qmdeve.liquidglass.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RadialGradient;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -41,8 +48,14 @@ public class LiquidGlassView extends FrameLayout {
     private float cornerRadius = Utils.dp2px(getResources(), 40), refractionHeight = Utils.dp2px(getResources(), 20), refractionOffset = -Utils.dp2px(getResources(), 70), tintAlpha = 0.0f, tintColorRed = 1.0f, tintColorGreen = 1.0f, tintColorBlue = 1.0f, blurRadius = 0.01f, dispersion = 0.5f, downX, downY, startTx, startTy;
     private boolean draggableEnabled = false;
     private boolean elasticEnabled = false;
+    private boolean touchEffectEnabled = false;
     private Config config;
     private LiquidTracker liquidTracker;
+    
+    // Glow effect variables
+    private Paint glowPaint;
+    private float glowX, glowY;
+    private boolean isTouching = false;
 
     public LiquidGlassView(Context context) {
         super(context);
@@ -69,6 +82,31 @@ public class LiquidGlassView extends FrameLayout {
         setClipToPadding(false);
         setClipChildren(false);
         liquidTracker = new LiquidTracker(this);
+        
+        glowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        glowPaint.setStyle(Paint.Style.FILL);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        if (touchEffectEnabled && isTouching) {
+            Path path = new Path();
+            RectF rect = new RectF(0, 0, getWidth(), getHeight());
+            path.addRoundRect(rect, cornerRadius, cornerRadius, Path.Direction.CW);
+            
+            canvas.save();
+            canvas.clipPath(path);
+            
+            float radius = Math.max(getWidth(), getHeight()) * 0.8f;
+            int[] colors = {Color.argb(60, 255, 255, 255), Color.TRANSPARENT};
+            float[] stops = {0f, 1f};
+            RadialGradient gradient = new RadialGradient(glowX, glowY, radius, colors, stops, Shader.TileMode.CLAMP);
+            glowPaint.setShader(gradient);
+            canvas.drawRect(rect, glowPaint);
+            
+            canvas.restore();
+        }
     }
 
     /**
@@ -275,6 +313,14 @@ public class LiquidGlassView extends FrameLayout {
         }
     }
 
+    /**
+     * Set whether the touch effect (iOS style press animation) is enabled
+     * @param enabled boolean
+     */
+    public void setTouchEffectEnabled(boolean enabled) {
+        this.touchEffectEnabled = enabled;
+    }
+
     private void updateConfig() {
         if (glass == null) {
             rebuild();
@@ -384,46 +430,74 @@ public class LiquidGlassView extends FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(android.view.MotionEvent e) {
-        if (!draggableEnabled) return super.onTouchEvent(e);
+        if (!draggableEnabled && !touchEffectEnabled) return super.onTouchEvent(e);
         if (elasticEnabled) liquidTracker.applyMovement(e);
 
         switch (e.getActionMasked()) {
             case android.view.MotionEvent.ACTION_DOWN:
-                downX = e.getRawX();
-                downY = e.getRawY();
-                startTx = getTranslationX();
-                startTy = getTranslationY();
-                return true;
-            case android.view.MotionEvent.ACTION_MOVE: {
-                float dx = e.getRawX() - downX;
-                float dy = e.getRawY() - downY;
-                float tx = startTx + dx;
-                float ty = startTy + dy;
-
-                ViewGroup parent = (ViewGroup) getParent();
-                if (parent != null) {
-                    int pw = parent.getWidth(), ph = parent.getHeight();
-                    int w = getWidth(), h = getHeight();
-                    if (pw > 0 && ph > 0 && w > 0 && h > 0) {
-                        float minX = -getLeft();
-                        float maxX = pw - getLeft() - w;
-                        float minY = -getTop();
-                        float maxY = ph - getTop() - h;
-                        if (tx < minX) tx = minX;
-                        if (tx > maxX) tx = maxX;
-                        if (ty < minY) ty = minY;
-                        if (ty > maxY) ty = maxY;
-                    }
+                if (touchEffectEnabled) {
+                    isTouching = true;
+                    liquidTracker.animateScale(1.02f);
+                    
+                    glowX = e.getX();
+                    glowY = e.getY();
+                    invalidate();
                 }
-                setTranslationX(tx);
-                setTranslationY(ty);
-                return true;
+
+                if (draggableEnabled) {
+                    downX = e.getRawX();
+                    downY = e.getRawY();
+                    startTx = getTranslationX();
+                    startTy = getTranslationY();
+                    return true;
+                }
+                break;
+            case android.view.MotionEvent.ACTION_MOVE: {
+                if (touchEffectEnabled) {
+                    glowX = e.getX();
+                    glowY = e.getY();
+                    invalidate();
+                }
+                
+                if (draggableEnabled) {
+                    float dx = e.getRawX() - downX;
+                    float dy = e.getRawY() - downY;
+                    float tx = startTx + dx;
+                    float ty = startTy + dy;
+
+                    ViewGroup parent = (ViewGroup) getParent();
+                    if (parent != null) {
+                        int pw = parent.getWidth(), ph = parent.getHeight();
+                        int w = getWidth(), h = getHeight();
+                        if (pw > 0 && ph > 0 && w > 0 && h > 0) {
+                            float minX = -getLeft();
+                            float maxX = pw - getLeft() - w;
+                            float minY = -getTop();
+                            float maxY = ph - getTop() - h;
+                            if (tx < minX) tx = minX;
+                            if (tx > maxX) tx = maxX;
+                            if (ty < minY) ty = minY;
+                            if (ty > maxY) ty = maxY;
+                        }
+                    }
+                    setTranslationX(tx);
+                    setTranslationY(ty);
+                    return true;
+                }
+                break;
             }
             case android.view.MotionEvent.ACTION_UP:
             case android.view.MotionEvent.ACTION_CANCEL:
-                return true;
-            default:
-                return super.onTouchEvent(e);
+                if (touchEffectEnabled) {
+                    isTouching = false;
+                    liquidTracker.animateScale(1f);
+                    invalidate();
+                }
+                if (draggableEnabled) return true;
+                break;
         }
+        
+        boolean superResult = super.onTouchEvent(e);
+        return touchEffectEnabled || superResult;
     }
 }

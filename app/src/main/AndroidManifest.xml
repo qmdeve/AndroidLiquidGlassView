@@ -25,5 +25,8 @@
         <activity
             android:name=".ElasticLiquidGlassViewActivity"
             android:exported="false" />
+        <activity
+            android:name=".TouchEffectActivity"
+            android:exported="false" />
     </application>
 </manifest>

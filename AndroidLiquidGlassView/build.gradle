@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
+    id "com.vanniktech.maven.publish" version "0.35.0"
+    id 'signing'
 }
 
 android {
@@ -29,4 +31,55 @@ android {
 dependencies {
     implementation libs.annotation.jvm
     implementation libs.dynamicanimation
+}
+
+mavenPublishing {
+    coordinates("com.qmdeve", "AndroidLiquidGlassView", "1.0.0-alpha11")
+
+    pom {
+        name = 'Android Liquid Glass View Library'
+        description = 'Android imitation of iOS 26 liquid glass effect, AndroidLiquidGlassView library has real refraction and dispersion effect'
+        url = 'https://github.com/QmDeve/AndroidLiquidGlassView'
+        inceptionYear = '2025'
+
+        organization {
+            name = 'QmDeve'
+            url = 'https://github.com/QmDeve'
+        }
+
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution = 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id = 'qmdeve'
+                name = 'QmDeve'
+                email = 'admin@qmdeve.com'
+                organization = 'QmDeve'
+                organizationUrl = 'https://github.com/QmDeve'
+            }
+
+            developer {
+                id = 'sbaiahmed1'
+                name = 'Ahmed Sbai'
+                email = 'ahmedclubust@gmail.com'
+                organizationUrl = 'https://github.com/sbaiahmed1'
+            }
+        }
+
+        scm {
+            connection = 'scm:git:github.com/QmDeve/AndroidLiquidGlassView.git'
+            developerConnection = 'scm:git:ssh://github.com/QmDeve/AndroidLiquidGlassView.git'
+            url = 'https://github.com/QmDeve/AndroidLiquidGlassView'
+            tag = 'v1.0.0-alpha11'
+        }
+    }
+
+    publishToMavenCentral()
+    signAllPublications()
 }

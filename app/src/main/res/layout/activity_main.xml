@@ -28,6 +28,16 @@
         app:overlayColor="#0248FB" />
 
     <com.qmdeve.blurview.widget.BlurButtonView
+        android:id="@+id/toucheffectview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Touch Effect Example"
+        android:textColor="@color/white"
+        app:buttonCornerRadius="99dp"
+        app:buttonTextBold="true"
+        app:overlayColor="#0248FB" />
+
+    <com.qmdeve.blurview.widget.BlurButtonView
         android:id="@+id/github"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.liquidglassview).setOnClickListener(v -> startActivity(new Intent(this, LiquidGlassViewActivity.class)));
         findViewById(R.id.elasticliquidglassview).setOnClickListener(v -> startActivity(new Intent(this, ElasticLiquidGlassViewActivity.class)));
+        findViewById(R.id.toucheffectview).setOnClickListener(v -> startActivity(new Intent(this, TouchEffectActivity.class)));
         findViewById(R.id.github).setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/QmDeve/AndroidLiquidGlassView"))));
     }
 }
