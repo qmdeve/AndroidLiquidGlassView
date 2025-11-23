@@ -7,10 +7,9 @@ import android.view.VelocityTracker;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-
-import com.qmdeve.liquidglass.dynamicanimation.DynamicAnimation;
-import com.qmdeve.liquidglass.dynamicanimation.SpringAnimation;
-import com.qmdeve.liquidglass.dynamicanimation.SpringForce;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 
 public class LiquidTracker {
     private VelocityTracker velocityTracker;
