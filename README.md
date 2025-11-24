@@ -14,7 +14,7 @@
 [![QQ Group](https://img.shields.io/badge/QQ%20Group-1046829337-blue.svg?logo=qq)](https://qm.qq.com/q/OEVn8ZslMq)
 
   <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="Apache"/>
-  <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 5"/>
+  <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 13"/>
   <img src="https://img.shields.io/maven-central/v/com.qmdeve/AndroidLiquidGlassView" alt="maven"/>
 
 <br>
@@ -45,7 +45,7 @@ English | [简体中文](./README_zh.md)
 
 ## Screenshot
 
-<img src="./img/image.png" alt="Stars"/>
+<img src="./img/img1.jpg" alt="Image"/>
 
 ## Demo experience
 **[Download Demo](./app/release/app-release.apk)**
