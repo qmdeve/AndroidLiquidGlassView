@@ -15,7 +15,7 @@
  *
  * @author QmDeve
  * @github https://github.com/QmDeve
- * @since 2025-11-02
+ * @since 2025-11-01
  */
 
 uniform shader content;
@@ -78,7 +78,7 @@ half4 saturateColor(half4 color, float amount) {
 half4 main(float2 coord) {
     float2 halfSize = size * 0.5;
     float2 centeredCoord = (coord + offset) - halfSize;
-    float radius = radiusAt(coord, cornerRadii);
+    float radius = radiusAt(centeredCoord, cornerRadii);
 
     float sd = sdRoundedRect(centeredCoord, halfSize, radius);
     if (-sd >= refractionHeight) {
@@ -95,7 +95,9 @@ half4 main(float2 coord) {
 
     sd = min(sd, 0.0);
     float d = circleMap(1.0 - -sd / refractionHeight) * refractionAmount;
-    float gradRadius = min(radius * 1.5, min(halfSize.x, halfSize.y));
+    float smoothRadius = max(radius * 1.5, 30.0);
+    float gradRadius = min(smoothRadius, min(halfSize.x, halfSize.y));
+
     float2 grad = normalize(gradSdRoundedRect(centeredCoord, halfSize, gradRadius) + depthEffect * normalize(centeredCoord));
 
     float2 refractedCoord = coord + d * grad;
