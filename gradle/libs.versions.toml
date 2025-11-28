@@ -1,10 +1,10 @@
 [versions]
-agp = "9.0.0-beta01"
+agp = "8.13.0"
 appcompat = "1.7.1"
 dynamicanimation = "1.1.0"
 material = "1.14.0-alpha07"
 annotationJvm = "1.9.1"
-qmblurview = "1.0.4.6"
+qmblurview = "1.0.4.7"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
