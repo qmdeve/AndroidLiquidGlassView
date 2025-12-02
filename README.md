@@ -15,7 +15,7 @@
 
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT"/>
   <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 13"/>
-  <img src="https://img.shields.io/maven-central/v/com.qmdeve/AndroidLiquidGlassView" alt="maven"/>
+  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Latest%20Version" alt="maven"/>
 
 <br>
 <br>
@@ -53,12 +53,12 @@ English | [简体中文](./README_zh.md)
 # Start using
 ### Quick integration
 
-<img src="https://img.shields.io/maven-central/v/com.qmdeve/AndroidLiquidGlassView?label=Maven%20Central%20Latest%20Version" alt="maven"/>
+<img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Latest%20Version" alt="maven"/>
 
 **Add dependencies in the `dependencies{}` block of `build.gradle`**
 ```gradle
 dependencies {
-   implementation 'com.qmdeve:AndroidLiquidGlassView:<Version>'
+   implementation 'com.qmdeve.liquidglass:core:<version>'
 }
 ```
 

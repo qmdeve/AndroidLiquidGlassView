@@ -17,7 +17,7 @@
 
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT"/>
   <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 12"/>
-  <img src="https://img.shields.io/maven-central/v/com.qmdeve/AndroidLiquidGlassView" alt="maven"/>
+  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Latest%20Version" alt="maven"/>
   
 <br>
 <br>
@@ -57,12 +57,12 @@
 # 开始使用
 ### 快速集成
 
-<img src="https://img.shields.io/maven-central/v/com.qmdeve/AndroidLiquidGlassView?label=Maven%20Central%20Latest%20Version" alt="maven"/>
+<img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Latest%20Version" alt="maven"/>
 
 **在 `build.gradle` 文件的 `dependencies{}` 块中添加依赖项**
 ```gradle
 dependencies {
-   implementation 'com.qmdeve:AndroidLiquidGlassView:<Version>'
+   implementation 'com.qmdeve.liquidglass:core:<version>'
 }
 ```
 
