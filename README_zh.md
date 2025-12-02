@@ -67,7 +67,7 @@ dependencies {
 ```
 
 ## 如何使用
-**请查看文档：[https://glass-docs.qmdeve.com/](https://glass-docs.qmdeve.com/zh/)**
+**请查看文档：[https://liquidglass.qmdeve.com/](https://liquidglass.qmdeve.com/zh/)**
 
 ---
 
