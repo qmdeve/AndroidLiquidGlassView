@@ -34,10 +34,10 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("com.qmdeve", "AndroidLiquidGlassView", "1.0.0-alpha11")
+    coordinates("com.qmdeve.liquidglass", "core", "1.0.0-alpha11")
 
     pom {
-        name = 'Android Liquid Glass View Library'
+        name = 'AndroidLiquidGlassView Core'
         description = 'Android imitation of iOS 26 liquid glass effect, AndroidLiquidGlassView library has real refraction and dispersion effect'
         url = 'https://github.com/QmDeve/AndroidLiquidGlassView'
         inceptionYear = '2025'
