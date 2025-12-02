@@ -63,7 +63,7 @@ dependencies {
 ```
 
 ## Quick use
-**Usage: [https://glass-docs.qmdeve.com/](https://glass-docs.qmdeve.com/)**
+**Usage: [https://liquidglass.qmdeve.com/](https://liquidglass.qmdeve.com/)**
 
 ---
 
