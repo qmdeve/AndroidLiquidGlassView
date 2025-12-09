@@ -34,6 +34,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import com.qmdeve.liquidglass.impl.Impl;
+import com.qmdeve.liquidglass.impl.LiquidGlassLegacyImpl;
 import com.qmdeve.liquidglass.impl.LiquidGlassimpl;
 
 import java.lang.ref.WeakReference;
@@ -91,6 +92,12 @@ public class LiquidGlass extends FrameLayout {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             impl = new LiquidGlassimpl(this, target, config);
+            addPreDrawListener();
+            requestLayout();
+            invalidate();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.BLUR_RADIUS = 5f;
+            impl = new LiquidGlassLegacyImpl(this, target, config);
             addPreDrawListener();
             requestLayout();
             invalidate();
