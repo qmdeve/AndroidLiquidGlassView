@@ -172,7 +172,7 @@ public class LiquidGlassView extends ViewGroup {
 
     /**
      * Set the refraction offset px
-     * Positive value will be converted to negative
+     * Positive values will be converted to negative
      *
      * @param px float
      */

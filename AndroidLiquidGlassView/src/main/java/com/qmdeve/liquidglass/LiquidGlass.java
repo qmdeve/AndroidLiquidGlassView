@@ -96,7 +96,6 @@ public class LiquidGlass extends FrameLayout {
             requestLayout();
             invalidate();
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.BLUR_RADIUS = 5f;
             impl = new LiquidGlassLegacyImpl(this, target, config);
             addPreDrawListener();
             requestLayout();
