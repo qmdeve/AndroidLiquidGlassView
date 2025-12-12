@@ -46,7 +46,7 @@ public class LiquidGlassView extends ViewGroup {
     private LiquidGlass glass;
     private ViewGroup customSource;
     private final Context context;
-    private float cornerRadius = Utils.dp2px(getResources(), 40), refractionHeight = Utils.dp2px(getResources(), 20), refractionOffset = -Utils.dp2px(getResources(), 70), tintAlpha = 0.0f, tintColorRed = 1.0f, tintColorGreen = 1.0f, tintColorBlue = 1.0f, blurRadius = 0.01f, dispersion = 0.5f, downX, downY, startTx, startTy;
+    private float cornerRadius = Utils.dp2px(getResources(), 40), refractionHeight = Utils.dp2px(getResources(), 20), refractionOffset = -Utils.dp2px(getResources(), 70), tintAlpha = 0.0f, tintColorRed = 1.0f, tintColorGreen = 1.0f, tintColorBlue = 1.0f, blurRadius = 0.01f, dispersion = 0.5f, borderWidth = 0.0f, downX, downY, startTx, startTy;
     private boolean draggableEnabled = false;
     private boolean elasticEnabled = false;
     private boolean touchEffectEnabled = false;
@@ -82,6 +82,7 @@ public class LiquidGlassView extends ViewGroup {
     private void init() {
         setClipToPadding(false);
         setClipChildren(false);
+        setWillNotDraw(false);
         liquidTracker = new LiquidTracker(this);
 
         glowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -275,6 +276,16 @@ public class LiquidGlassView extends ViewGroup {
         this.touchEffectEnabled = enabled;
     }
 
+    /**
+     * Set the border width in pixels. Only the border area will show liquid effect, center will be transparent.
+     * Set to 0 to show effect on entire view.
+     * @param px float border width in pixels
+     */
+    public void setBorderWidth(float px) {
+        this.borderWidth = Math.max(0f, px);
+        updateConfig();
+    }
+
     private void updateConfig() {
         if (glass == null) {
             rebuild();
@@ -297,6 +308,7 @@ public class LiquidGlassView extends ViewGroup {
         config.TINT_COLOR_BLUE = tintColorBlue;
         config.TINT_COLOR_GREEN = tintColorGreen;
         config.TINT_COLOR_RED = tintColorRed;
+        config.BORDER_WIDTH = borderWidth;
 
         glass.post(() -> glass.updateParameters());
     }
@@ -355,6 +367,7 @@ public class LiquidGlassView extends ViewGroup {
                 .tintColorGreen(tintColorGreen)
                 .tintColorBlue(tintColorBlue)
                 .dispersion(dispersion)
+                .borderWidth(borderWidth)
                 .size(w, h)
         );
 

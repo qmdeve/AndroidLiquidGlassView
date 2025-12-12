@@ -26,6 +26,8 @@ public final class LiquidGlassLegacyImpl implements Impl {
     private Bitmap buffer;
     private Bitmap blurredBuffer;
     private RenderNode renderNode;
+    private long lastCaptureTime = 0;
+    private static final long MIN_CAPTURE_INTERVAL_MS = 16;
 
     public LiquidGlassLegacyImpl(@NonNull View host, @NonNull View target, @NonNull Config config) {
         this.host = host;
@@ -47,17 +49,30 @@ public final class LiquidGlassLegacyImpl implements Impl {
 
     @Override
     public void onPreDraw() {
-        captureTarget();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            applyCpuBlur();
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            updateRenderNode();
+        long now = System.currentTimeMillis();
+        if (now - lastCaptureTime >= MIN_CAPTURE_INTERVAL_MS) {
+            captureTarget();
+            lastCaptureTime = now;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                applyCpuBlur();
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                updateRenderNode();
+            }
         }
     }
 
     @Override
     public void draw(Canvas canvas) {
         if (buffer == null) return;
+        float borderWidth = config.BORDER_WIDTH;
+        if (borderWidth > 0.0f) {
+            drawWithBorderMask(canvas);
+        } else {
+            drawFull(canvas);
+        }
+    }
+
+    private void drawFull(Canvas canvas) {
         if (!canvas.isHardwareAccelerated() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             canvas.drawBitmap(blurredBuffer != null ? blurredBuffer : buffer, 0, 0, null);
             return;
@@ -73,6 +88,29 @@ public final class LiquidGlassLegacyImpl implements Impl {
             canvas.drawBitmap(blurredBuffer != null ? blurredBuffer : buffer, 0, 0, null);
         }
         if (tintAlpha > 0.001f) canvas.drawRect(0, 0, buffer.getWidth(), buffer.getHeight(), tintPaint);
+    }
+
+    private void drawWithBorderMask(Canvas canvas) {
+        int width = buffer.getWidth();
+        int height = buffer.getHeight();
+        if (width == 0 || height == 0) return;
+        float borderWidth = config.BORDER_WIDTH;
+        android.graphics.Paint maskPaint = new android.graphics.Paint(Paint.ANTI_ALIAS_FLAG);
+        maskPaint.setXfermode(new android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_OUT));
+        int savedLayer = canvas.saveLayer(0, 0, width, height, null);
+        drawFull(canvas);
+        float cornerRadius = config.CORNER_RADIUS_PX;
+        android.graphics.Path path = new android.graphics.Path();
+        float innerWidth = Math.max(0, width - borderWidth * 2);
+        float innerHeight = Math.max(0, height - borderWidth * 2);
+        float innerCornerRadius = Math.max(0, cornerRadius - borderWidth);
+        android.graphics.RectF innerRect = new android.graphics.RectF(
+                borderWidth, borderWidth,
+                borderWidth + innerWidth, borderWidth + innerHeight
+        );
+        path.addRoundRect(innerRect, innerCornerRadius, innerCornerRadius, android.graphics.Path.Direction.CW);
+        canvas.drawPath(path, maskPaint);
+        canvas.restoreToCount(savedLayer);
     }
 
     @Override
@@ -92,6 +130,9 @@ public final class LiquidGlassLegacyImpl implements Impl {
 
     private void captureTarget() {
         if (buffer == null) return;
+        if (target.getVisibility() != View.VISIBLE || host.getVisibility() != View.VISIBLE) {
+            return;
+        }
         int width = host.getWidth();
         int height = host.getHeight();
         if (width == 0 || height == 0) return;
@@ -100,7 +141,9 @@ public final class LiquidGlassLegacyImpl implements Impl {
         int dx = hostPos[0] - targetPos[0];
         int dy = hostPos[1] - targetPos[1];
         int hostVisibility = host.getVisibility();
-        host.setVisibility(View.INVISIBLE);
+        if (hostVisibility == View.VISIBLE) {
+            host.setVisibility(View.INVISIBLE);
+        }
         try {
             Canvas rec = new Canvas(buffer);
             rec.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
@@ -109,7 +152,9 @@ public final class LiquidGlassLegacyImpl implements Impl {
             target.draw(rec);
             rec.restore();
         } finally {
-            host.setVisibility(hostVisibility);
+            if (hostVisibility == View.VISIBLE) {
+                host.setVisibility(hostVisibility);
+            }
         }
     }
 
@@ -127,7 +172,9 @@ public final class LiquidGlassLegacyImpl implements Impl {
         int h = buffer.getHeight();
         if (w == 0 || h == 0) return;
         Canvas rec = renderNode.beginRecording(w, h);
-        rec.drawBitmap(buffer, 0, 0, blurPaint);
+        if (rec != null) {
+            rec.drawBitmap(buffer, 0, 0, blurPaint);
+        }
         renderNode.endRecording();
         float sigma = Math.max(0f, config.BLUR_RADIUS);
         RenderEffect effect = sigma > 0.01f ? RenderEffect.createBlurEffect(sigma, sigma, Shader.TileMode.CLAMP) : null;

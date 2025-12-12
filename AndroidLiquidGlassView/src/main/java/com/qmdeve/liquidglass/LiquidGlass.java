@@ -45,9 +45,12 @@ public class LiquidGlass extends FrameLayout {
     private ViewGroup target;
     private boolean listenerAdded = false;
     private final Config config;
+    private boolean isPaused = false;
 
     private static class PreDrawListener implements ViewTreeObserver.OnPreDrawListener {
         private final WeakReference<LiquidGlass> liquidGlassRef;
+        private int frameSkipCounter = 0;
+        private static final int FRAME_SKIP_INTERVAL = 1;
 
         public PreDrawListener(LiquidGlass liquidGlass) {
             this.liquidGlassRef = new WeakReference<>(liquidGlass);
@@ -56,7 +59,15 @@ public class LiquidGlass extends FrameLayout {
         @Override
         public boolean onPreDraw() {
             LiquidGlass liquidGlass = liquidGlassRef.get();
-            if (liquidGlass != null && liquidGlass.impl != null) {
+            if (liquidGlass == null || liquidGlass.impl == null) {
+                return true;
+            }
+            if (liquidGlass.getVisibility() != View.VISIBLE || liquidGlass.getAlpha() < 0.01f) {
+                return true;
+            }
+            frameSkipCounter++;
+            if (frameSkipCounter >= FRAME_SKIP_INTERVAL) {
+                frameSkipCounter = 0;
                 liquidGlass.impl.onPreDraw();
             }
             return true;
@@ -108,12 +119,16 @@ public class LiquidGlass extends FrameLayout {
     private void init() {
         setWillNotDraw(false);
         setLayerType(LAYER_TYPE_HARDWARE, null);
+        setClipToPadding(false);
+        setClipChildren(false);
         updateOutlineProvider();
     }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
-        if (impl != null) impl.draw(canvas);
+        if (impl != null && !isPaused && getVisibility() == View.VISIBLE) {
+            impl.draw(canvas);
+        }
     }
 
     public void updateParameters() {
@@ -144,14 +159,22 @@ public class LiquidGlass extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        isPaused = false;
         addPreDrawListener();
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        isPaused = true;
         removePreDrawListener();
         if (impl != null) impl.dispose();
         super.onDetachedFromWindow();
+    }
+
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        isPaused = (visibility != View.VISIBLE);
     }
 
     private void addPreDrawListener() {

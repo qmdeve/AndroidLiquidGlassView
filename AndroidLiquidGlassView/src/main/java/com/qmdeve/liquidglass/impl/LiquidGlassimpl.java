@@ -53,10 +53,13 @@ public final class LiquidGlassimpl implements Impl {
     private float lastCornerRadius, lastEccentricFactor, lastRefractionHeight, lastRefractionAmount,
             lastContrast, lastWhitePoint, lastChromaMultiplier, lastSigma,
             lastChromaticAberration, lastDepthEffect, lastBlurLevel,
-            lastTintRed, lastTintGreen, lastTintBlue, lastTintAlpha;
+            lastTintRed, lastTintGreen, lastTintBlue, lastTintAlpha, lastBorderWidth;
 
     private boolean needsUpdate = true;
     private long lastBlurUpdateTime = 0;
+    private long lastRecordTime = 0;
+    private static final long MIN_RECORD_INTERVAL_MS = 16;
+    private static final long MIN_BLUR_UPDATE_INTERVAL_MS = 100;
     private final Config config;
 
     public LiquidGlassimpl(View host, View target, Config config) {
@@ -81,6 +84,7 @@ public final class LiquidGlassimpl implements Impl {
         lastTintGreen = Float.NaN;
         lastTintBlue = Float.NaN;
         lastTintAlpha = Float.NaN;
+        lastBorderWidth = Float.NaN;
 
         host.post(this::applyRenderEffect);
     }
@@ -94,7 +98,11 @@ public final class LiquidGlassimpl implements Impl {
 
     @Override
     public void onPreDraw() {
-        record();
+        long now = System.currentTimeMillis();
+        if (now - lastRecordTime >= MIN_RECORD_INTERVAL_MS) {
+            record();
+            lastRecordTime = now;
+        }
 
         float cornerRadius = config.CORNER_RADIUS_PX;
         float eccentricFactor = config.ECCENTRIC_FACTOR;
@@ -110,23 +118,26 @@ public final class LiquidGlassimpl implements Impl {
         float tintGreen = config.TINT_COLOR_GREEN;
         float tintBlue = config.TINT_COLOR_BLUE;
         float tintAlpha = config.TINT_ALPHA;
+        float borderWidth = config.BORDER_WIDTH;
 
-        boolean paramsChanged =
-                lastCornerRadius != cornerRadius ||
-                        lastEccentricFactor != eccentricFactor ||
-                        lastRefractionHeight != refractionHeight ||
-                        lastRefractionAmount != refractionAmount ||
-                        lastContrast != contrast ||
-                        lastWhitePoint != whitePoint ||
-                        lastChromaMultiplier != chromaMultiplier ||
-                        lastBlurLevel != blurLevel ||
-                        lastChromaticAberration != chromaticAberration ||
-                        lastDepthEffect != depthEffect ||
-                        lastTintRed != tintRed ||
-                        lastTintGreen != tintGreen ||
-                        lastTintBlue != tintBlue ||
-                        lastTintAlpha != tintAlpha ||
-                        needsUpdate;
+        boolean paramsChanged = needsUpdate;
+        if (!paramsChanged) {
+            paramsChanged = (Math.abs(lastCornerRadius - cornerRadius) > 0.1f) ||
+                    (Math.abs(lastEccentricFactor - eccentricFactor) > 0.001f) ||
+                    (Math.abs(lastRefractionHeight - refractionHeight) > 0.1f) ||
+                    (Math.abs(lastRefractionAmount - refractionAmount) > 0.1f) ||
+                    (Math.abs(lastContrast - contrast) > 0.001f) ||
+                    (Math.abs(lastWhitePoint - whitePoint) > 0.001f) ||
+                    (Math.abs(lastChromaMultiplier - chromaMultiplier) > 0.001f) ||
+                    (Math.abs(lastBlurLevel - blurLevel) > 0.01f) ||
+                    (Math.abs(lastChromaticAberration - chromaticAberration) > 0.001f) ||
+                    (Math.abs(lastDepthEffect - depthEffect) > 0.001f) ||
+                    (Math.abs(lastTintRed - tintRed) > 0.001f) ||
+                    (Math.abs(lastTintGreen - tintGreen) > 0.001f) ||
+                    (Math.abs(lastTintBlue - tintBlue) > 0.001f) ||
+                    (Math.abs(lastTintAlpha - tintAlpha) > 0.001f) ||
+                    (Math.abs(lastBorderWidth - borderWidth) > 0.1f);
+        }
 
         if (paramsChanged) {
             lastCornerRadius = cornerRadius;
@@ -143,27 +154,47 @@ public final class LiquidGlassimpl implements Impl {
             lastTintGreen = tintGreen;
             lastTintBlue = tintBlue;
             lastTintAlpha = tintAlpha;
+            lastBorderWidth = borderWidth;
             needsUpdate = false;
             applyRenderEffect();
         }
     }
 
     private void record() {
+        if (target.getVisibility() != View.VISIBLE || host.getVisibility() != View.VISIBLE) {
+            return;
+        }
         int w = target.getWidth(), h = target.getHeight();
         if (w == 0 || h == 0) return;
-
-        Canvas rec = node.beginRecording(w, h);
+        
         target.getLocationInWindow(tp);
         host.getLocationInWindow(hp);
-        rec.translate(-(hp[0] - tp[0]), -(hp[1] - tp[1]));
-        target.draw(rec);
+        int dx = hp[0] - tp[0];
+        int dy = hp[1] - tp[1];
+        
+        if (dx == 0 && dy == 0 && w == host.getWidth() && h == host.getHeight()) {
+            Canvas rec = node.beginRecording(w, h);
+            if (rec != null) {
+                target.draw(rec);
+            }
+        } else {
+            Canvas rec = node.beginRecording(w, h);
+            if (rec != null) {
+                rec.translate(-dx, -dy);
+                target.draw(rec);
+            }
+        }
         node.endRecording();
     }
 
     @Override
     public void draw(Canvas canvas) {
-        if (!canvas.isHardwareAccelerated()) return;
-        canvas.drawRenderNode(node);
+        if (!canvas.isHardwareAccelerated()) {
+            return;
+        }
+        if (node.hasDisplayList()) {
+            canvas.drawRenderNode(node);
+        }
     }
 
     private void applyRenderEffect() {
@@ -193,7 +224,7 @@ public final class LiquidGlassimpl implements Impl {
         RenderEffect contentEffect = null;
         if (blurLevel > 0.01f) {
             long now = System.currentTimeMillis();
-            if (cachedBlurEffect == null || Math.abs(blurLevel - lastSigma) > 0.3f || now - lastBlurUpdateTime > 120) {
+            if (cachedBlurEffect == null || Math.abs(blurLevel - lastSigma) > 0.3f || now - lastBlurUpdateTime > MIN_BLUR_UPDATE_INTERVAL_MS) {
                 try {
                     contentEffect = RenderEffect.createBlurEffect(blurLevel, blurLevel, Shader.TileMode.CLAMP);
                     cachedBlurEffect = contentEffect;
@@ -219,6 +250,7 @@ public final class LiquidGlassimpl implements Impl {
         liquidShader.setFloatUniform("chromaMultiplier", chromaMultiplier);
         liquidShader.setFloatUniform("tintColor", new float[]{tintRed, tintGreen, tintBlue});
         liquidShader.setFloatUniform("tintAlpha", tintAlpha);
+        liquidShader.setFloatUniform("borderWidth", config.BORDER_WIDTH);
 
         RenderEffect shaderEffect = RenderEffect.createRuntimeShaderEffect(liquidShader, "content");
         RenderEffect finalEffect = (contentEffect != null)

@@ -34,13 +34,14 @@ public class Config {
     public volatile float CHROMA_MULTIPLIER;
     public volatile float BLUR_RADIUS;
     public float TINT_ALPHA, TINT_COLOR_RED, TINT_COLOR_GREEN, TINT_COLOR_BLUE;
+    public float BORDER_WIDTH = 0.0f;
 
     public void configure(@Nullable Overrides overrides) {
         if (overrides != null) overrides.apply(this);
     }
 
     public static final class Overrides {
-        Float cornerRadius, refractionHeight, refractionOffset, contrast, whitePoint, chromaMultiplier, blurRadius, tintAlpha, tintColorRed, tintColorGreen, tintColorBlue, dispersion;
+        Float cornerRadius, refractionHeight, refractionOffset, contrast, whitePoint, chromaMultiplier, blurRadius, tintAlpha, tintColorRed, tintColorGreen, tintColorBlue, dispersion, borderWidth;
         Integer width, height;
 
         public Overrides tintAlpha(float v) {
@@ -114,6 +115,11 @@ public class Config {
             return this;
         }
 
+        public Overrides borderWidth(float v) {
+            borderWidth = v;
+            return this;
+        }
+
         public Overrides size(int w, int h) {
             width = w;
             height = h;
@@ -135,6 +141,7 @@ public class Config {
             if (tintColorGreen != null) c.TINT_COLOR_GREEN = tintColorGreen;
             if (tintColorBlue != null) c.TINT_COLOR_BLUE = tintColorBlue;
             if (dispersion != null) c.DISPERSION = dispersion;
+            if (borderWidth != null) c.BORDER_WIDTH = borderWidth;
         }
     }
 }
