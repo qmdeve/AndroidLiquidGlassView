@@ -1,7 +1,42 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2025 QmDeve
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * ===========================================
+ * Project: AndroidLiquidGlassView
+ * Created Date: 2025-11-01
+ * Author: QmDeve
+ * GitHub: https://github.com/QmDeve/AndroidLiquidGlassView
+ *
+ * Contributors:
+ * - Donny Yale - https://github.com/QmDeve
+ * - Ahmed Sbai - https://github.com/sbaiahmed1
+ * ===========================================
+ */
+
 plugins {
     alias(libs.plugins.android.library)
-    id "com.vanniktech.maven.publish" version "0.35.0"
-    id 'signing'
+    alias(libs.plugins.vanniktech.maven.publish)
+    alias(libs.plugins.signing)
 }
 
 android {
@@ -30,53 +65,55 @@ dependencies {
     implementation libs.dynamicanimation
 }
 
-mavenPublishing {
-    coordinates("com.qmdeve.liquidglass", "core", "1.0.0-alpha11")
+if (!project.hasProperty('jitpack')) {
+    mavenPublishing {
+        coordinates(GROUP_NAME, ARTIFACT_NAME, VERSION)
 
-    pom {
-        name = 'AndroidLiquidGlassView Core'
-        description = 'Android imitation of iOS 26 liquid glass effect, AndroidLiquidGlassView library has real refraction and dispersion effect'
-        url = 'https://github.com/QmDeve/AndroidLiquidGlassView'
-        inceptionYear = '2025'
-
-        organization {
-            name = 'QmDeve'
-            url = 'https://github.com/QmDeve'
-        }
-
-        licenses {
-            license {
-                name = 'MIT License'
-                url = 'https://github.com/QmDeve/AndroidLiquidGlassView/blob/master/LICENSE'
-                distribution = 'repo'
-            }
-        }
-
-        developers {
-            developer {
-                id = 'qmdeve'
-                name = 'QmDeve'
-                email = 'admin@qmdeve.com'
-                organization = 'QmDeve'
-                organizationUrl = 'https://github.com/QmDeve'
-            }
-
-            developer {
-                id = 'sbaiahmed1'
-                name = 'Ahmed Sbai'
-                email = 'ahmedclubust@gmail.com'
-                organizationUrl = 'https://github.com/sbaiahmed1'
-            }
-        }
-
-        scm {
-            connection = 'scm:git:github.com/QmDeve/AndroidLiquidGlassView.git'
-            developerConnection = 'scm:git:ssh://github.com/QmDeve/AndroidLiquidGlassView.git'
+        pom {
+            name = 'AndroidLiquidGlassView Core'
+            description = 'Android imitation of iOS 26 liquid glass effect, AndroidLiquidGlassView library has real refraction and dispersion effect'
             url = 'https://github.com/QmDeve/AndroidLiquidGlassView'
-            tag = 'v1.0.0-alpha11'
-        }
-    }
+            inceptionYear = '2025'
 
-    publishToMavenCentral()
-    signAllPublications()
+            organization {
+                name = 'QmDeve'
+                url = 'https://github.com/QmDeve'
+            }
+
+            licenses {
+                license {
+                    name = 'MIT License'
+                    url = 'https://github.com/QmDeve/AndroidLiquidGlassView/blob/master/LICENSE'
+                    distribution = 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id = 'qmdeve'
+                    name = 'Donny Yale'
+                    email = 'admin@qmdeve.com'
+                    organization = 'QmDeve'
+                    organizationUrl = 'https://github.com/QmDeve'
+                }
+
+                developer {
+                    id = 'sbaiahmed1'
+                    name = 'Ahmed Sbai'
+                    email = 'ahmedclubust@gmail.com'
+                    organizationUrl = 'https://github.com/sbaiahmed1'
+                }
+            }
+
+            scm {
+                connection = 'scm:git:github.com/QmDeve/AndroidLiquidGlassView.git'
+                developerConnection = 'scm:git:ssh://github.com/QmDeve/AndroidLiquidGlassView.git'
+                url = 'https://github.com/QmDeve/AndroidLiquidGlassView'
+                tag = "v${VERSION}"
+            }
+        }
+
+        publishToMavenCentral()
+        signAllPublications()
+    }
 }
