@@ -1,17 +1,17 @@
 [versions]
-agp = "8.13.0"
+agp = "8.13.2"
 appcompat = "1.7.1"
 dynamicanimation = "1.1.0"
 material = "1.14.0-alpha07"
 annotationJvm = "1.9.1"
-qmblurview = "1.0.4.7"
+qmblurview = "1.0.5"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 dynamicanimation = { module = "androidx.dynamicanimation:dynamicanimation", version.ref = "dynamicanimation" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
-qmblurview = { module = "com.qmdeve:QmBlurView", version.ref = "qmblurview" }
+qmblurview = { module = "com.qmdeve.blurview:core", version.ref = "qmblurview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
