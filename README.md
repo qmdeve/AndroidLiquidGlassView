@@ -11,11 +11,10 @@
 [![GitLab](https://img.shields.io/badge/GitLab-Repository-orange?logo=gitlab)](https://gitlab.com/QmDeve/AndroidLiquidGlassView)
 
 [![Telegram](https://img.shields.io/badge/Telegram%20Group-QmDeves-blue.svg?logo=telegram)](https://t.me/QmDeves)
-[![QQ Group](https://img.shields.io/badge/QQ%20Group-1046829337-blue.svg?logo=qq)](https://qm.qq.com/q/OEVn8ZslMq)
 
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT"/>
   <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 13"/>
-  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Latest%20Version" alt="maven"/>
+  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Maven%20Central%20Version" alt="maven"/>
 
 <br>
 <br>
@@ -26,22 +25,10 @@ English | [简体中文](./README_zh.md)
 
 ---
 
-> **Note: Repository**
->
-> This project is maintained on multiple platforms to facilitate developers in different regions. The content of all warehouses should be consistent
-> - **Main Repository**：[GitHub](https://github.com/QmDeve/AndroidLiquidGlassView)
-> - **Other Repository**：
->   - [GitLab](https://gitlab.com/QmDeve/AndroidLiquidGlassView)
-
----
-
 ## Characteristic
 - **Realistic `liquid glass` effect - Physically-based `refraction` and `dispersion` effects**
 - **Height can be customized - support the adjustment of rounded corner radius, refraction height, refraction offset, dispersion parameters, blur radius, tone, etc**
 - **Based on physical and realistic elastic effects**
-
-## Requirements
-- **Android API 33 + (Android 13), to get the full glass effect**
 
 ## Screenshot
 
@@ -81,7 +68,6 @@ dependencies {
 
 ## My open source project
  - **[QmBlurView](https://github.com/QmDeve/QmBlurView)**
- - **[QmReflection](https://github.com/QmDeve/QmReflection)**
  - **[Qm Authenticator for Android](https://github.com/Rouneant/Qm-Authenticator-for-Android)**
 
 ## License
