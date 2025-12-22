@@ -5,6 +5,7 @@ dynamicanimation = "1.1.0"
 material = "1.14.0-alpha07"
 annotationJvm = "1.9.1"
 qmblurview = "1.0.5"
+vanniktech = "0.35.0"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -16,3 +17,5 @@ qmblurview = { module = "com.qmdeve.blurview:core", version.ref = "qmblurview" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech" }
+signing = { id = "signing" }
