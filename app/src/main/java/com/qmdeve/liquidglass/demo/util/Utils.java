@@ -1,21 +1,36 @@
-/**
- * Copyright 2025 QmDeve
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * MIT License
  *
- * @author QmDeve
- * @github https://github.com/QmDeve
- * @since 2025-11-01
+ * Copyright (c) 2025 QmDeve
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ * ===========================================
+ * Project: AndroidLiquidGlassView
+ * Created Date: 2025-11-01
+ * Author: QmDeve
+ * GitHub: https://github.com/QmDeve/AndroidLiquidGlassView
+ *
+ * Contributors:
+ * - Donny Yale - https://github.com/QmDeve
+ * - Ahmed Sbai - https://github.com/sbaiahmed1
+ * ===========================================
  */
 
 package com.qmdeve.liquidglass.demo.util;
@@ -25,6 +40,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -55,12 +71,15 @@ public class Utils {
         window.setStatusBarColor(Color.TRANSPARENT);
     }
 
-    public static float dp2px(Resources resources, float value) {
-        if (value == 0) {
-            return 0;
-        }
-        float density = resources.getDisplayMetrics().density;
-        return density * value;
+    /**
+     * Convert dp to px
+     *
+     * @param res Resources
+     * @param dp  The dp value to be converted
+     * @return The px value after the conversion is completed
+     */
+    public static float dp2px(Resources res, float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
     }
 
     public static int getNavigationBarHeight(View view) {
