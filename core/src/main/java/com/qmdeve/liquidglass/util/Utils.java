@@ -25,6 +25,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.WindowManager;
 import android.view.WindowMetrics;
 
@@ -45,11 +46,14 @@ public class Utils {
         return dm.widthPixels;
     }
 
-    public static float dp2px(Resources resources, float value) {
-        if (value == 0) {
-            return 0;
-        }
-        float density = resources.getDisplayMetrics().density;
-        return density * value;
+    /**
+     * Convert dp to px
+     *
+     * @param res Resources
+     * @param dp  The dp value to be converted
+     * @return The px value after the conversion is completed
+     */
+    public static float dp2px(Resources res, float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
     }
 }
