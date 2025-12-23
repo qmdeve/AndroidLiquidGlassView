@@ -33,35 +33,42 @@
  * ===========================================
  */
 
-package com.qmdeve.liquidglass.demo;
+package com.qmdeve.liquidglass.util;
 
-import android.os.Bundle;
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import com.qmdeve.liquidglass.demo.util.Utils;
-import com.qmdeve.liquidglass.widget.LiquidGlassView;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.os.Build;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.WindowManager;
+import android.view.WindowMetrics;
 
-public class TouchEffectActivity extends AppCompatActivity {
+public class Utils {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_touch_effect);
-        Utils.transparentStatusBar(getWindow());
-        Utils.transparentNavigationBar(getWindow());
+    public static int getDeviceWidthPx(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowManager wm = context.getSystemService(WindowManager.class);
+            if (wm != null) {
+                WindowMetrics metrics = wm.getCurrentWindowMetrics();
+                Rect bounds = metrics.getBounds();
+                return bounds.width();
+            }
+        }
 
-        LiquidGlassView liquidGlassView = findViewById(R.id.liquid_glass_view);
-        android.view.ViewGroup contentContainer = findViewById(R.id.content_container);
-        
-        // Bind the content to be blurred
-        liquidGlassView.bind(contentContainer);
-        
-        // Enable the touch effect (iOS style animation)
-        liquidGlassView.setTouchEffectEnabled(true);
-        
-        // Optional: Configure other properties for better look
-        liquidGlassView.setCornerRadius(Utils.dp2px(getResources(), 40));
-        liquidGlassView.setBlurRadius(15f);
+        Resources res = context.getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        return dm.widthPixels;
+    }
+
+    /**
+     * Convert dp to px
+     *
+     * @param res Resources
+     * @param dp  The dp value to be converted
+     * @return The px value after the conversion is completed
+     */
+    public static float dp2px(Resources res, float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
     }
 }

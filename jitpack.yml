@@ -1,0 +1,8 @@
+jdk:
+  - openjdk17
+
+before_install:
+  - chmod +x gradlew
+
+install:
+  - ./gradlew clean publishToMavenLocal -Psigning.disabled=true -Pjitpack=true

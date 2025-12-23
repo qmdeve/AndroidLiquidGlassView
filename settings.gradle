@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidLiquidGlassView"
 include ':app'
-include ':AndroidLiquidGlassView'
+include ':core'
