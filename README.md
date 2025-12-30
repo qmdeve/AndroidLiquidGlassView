@@ -45,7 +45,7 @@ English | [简体中文](./README_zh.md)
 **Add dependencies in the `dependencies{}` block of `build.gradle`**
 ```gradle
 dependencies {
-   implementation 'com.qmdeve.liquidglass:core:<version>'
+   implementation 'com.qmdeve.liquidglass:core:1.0.0'
 }
 ```
 
