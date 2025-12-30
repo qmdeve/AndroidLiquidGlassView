@@ -33,6 +33,8 @@
  * ===========================================
  */
 
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.vanniktech.maven.publish)
@@ -68,6 +70,7 @@ dependencies {
 if (!project.hasProperty('jitpack')) {
     mavenPublishing {
         coordinates(GROUP_NAME, ARTIFACT_NAME, VERSION)
+        configure(new AndroidSingleVariantLibrary("release", true, false))
 
         pom {
             name = 'AndroidLiquidGlassView Core'
