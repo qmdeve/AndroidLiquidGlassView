@@ -32,7 +32,7 @@ English | [简体中文](./README_zh.md)
 
 ## Screenshot
 
-<img src="./img/img1.jpg" alt="Image"/>
+<img src="https://cloud.qmdeve.com/f/pvTl/img1.png" alt="Image"/>
 
 ## Demo experience
 **[Download Demo](./app/release/app-release.apk)**
