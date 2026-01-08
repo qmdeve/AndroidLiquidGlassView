@@ -1,23 +1,18 @@
 <div align="center">
 
-<img src="https://socialify.git.ci/QmDeve/AndroidLiquidGlassView/image?description=1&font=Inter&name=1&owner=1&pattern=Floating+Cogs&theme=Light" alt="GitHub" width="100%"/>
-
 ## AndroidLiquidGlassView
 **Android 仿 iOS 26 液态玻璃效果，AndroidLiquidGlassView 库具有真实的折射和色散效果**
 
 <br>
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://GitHub.com/QmDeve/AndroidLiquidGlassView/)
-[![GitLab](https://img.shields.io/badge/GitLab-Repository-orange?logo=gitlab)](https://gitlab.com/QmDeve/AndroidLiquidGlassView)
-[![Gitee](https://img.shields.io/badge/Gitee-Repository-red?logo=gitee)](https://gitee.com/QmDeve/AndroidLiquidGlassView)
-[![GitCode](https://img.shields.io/badge/GitCode-Repository-blue?logo=gitcode)](https://gitcode.com/QmDeve/AndroidLiquidGlassView)
 
 [![Telegram](https://img.shields.io/badge/Telegram%20Group-QmDeves-blue.svg?logo=telegram)](https://t.me/QmDeves)
 [![QQ Group](https://img.shields.io/badge/QQ%20Group-1046829337-blue.svg?logo=qq)](https://qm.qq.com/q/OEVn8ZslMq)
 
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT"/>
   <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 12"/>
-  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Maven%20Central%20Version" alt="maven"/>
+  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Maven%20Central" alt="maven"/>
   
 <br>
 <br>
