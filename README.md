@@ -1,7 +1,6 @@
 <div align="center">
-
-<img src="https://socialify.git.ci/QmDeve/AndroidLiquidGlassView/image?description=1&font=Inter&name=1&owner=1&pattern=Floating+Cogs&theme=Light" alt="GitHub" width="100%"/>
-
+<br>
+  
 ## AndroidLiquidGlassView
 **Android imitation of iOS 26 liquid glass effect, AndroidLiquidGlassView library has real refraction and dispersion effect**
 
@@ -14,12 +13,9 @@
 
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT"/>
   <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 13"/>
-  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Maven%20Central%20Version" alt="maven"/>
+  <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Maven%20Central" alt="maven"/>
 
 <br>
-<br>
-
-English | [简体中文](./README_zh.md)
 
 </div>
 
