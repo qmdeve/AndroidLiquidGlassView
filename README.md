@@ -1,5 +1,4 @@
 <div align="center">
-<br>
   
 ## AndroidLiquidGlassView
 **Android imitation of iOS 26 liquid glass effect, AndroidLiquidGlassView library has real refraction and dispersion effect**
@@ -15,11 +14,7 @@
   <img src="https://img.shields.io/badge/Android-13.0%2B-brightgreen.svg" alt="Android 13"/>
   <img src="https://img.shields.io/maven-central/v/com.qmdeve.liquidglass/core?label=Maven%20Central" alt="maven"/>
 
-<br>
-
 </div>
-
----
 
 ## Characteristic
 - **Realistic `liquid glass` effect - Physically-based `refraction` and `dispersion` effects**
