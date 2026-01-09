@@ -2,9 +2,9 @@
 agp = "8.13.2"
 appcompat = "1.7.1"
 dynamicanimation = "1.1.0"
-material = "1.14.0-alpha07"
+material = "1.14.0-alpha08"
 annotationJvm = "1.9.1"
-qmblurview = "1.0.5"
+qmblurview = "1.1.2"
 vanniktech = "0.35.0"
 
 [libraries]
