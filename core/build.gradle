@@ -75,7 +75,7 @@ if (!project.hasProperty('jitpack')) {
         pom {
             name = 'AndroidLiquidGlassView Core'
             description = 'Android imitation of iOS 26 liquid glass effect, AndroidLiquidGlassView library has real refraction and dispersion effect'
-            url = 'https://github.com/QmDeve/AndroidLiquidGlassView'
+            url = 'https://liquidglass.qmdeve.com/'
             inceptionYear = '2025'
 
             organization {
